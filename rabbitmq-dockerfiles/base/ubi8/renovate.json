@@ -1,0 +1,24 @@
+{
+  "assignees": ["@colton.freeman","@rmueller"],
+  "baseBranches": ["development"],
+  "automerge": false,
+  "gitLabAutomerge": false,
+  "packageRules": [
+    {
+      "datasources": ["docker"],
+      "packageNames": ["registry.access.redhat.com/ubi8"],
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)?$"
+    }
+  ],
+  "regexManagers": [
+    {
+      "fileMatch": ["^hardening_manifest.yaml$"],
+      "matchStrings": [
+        "org\\.opencontainers\\.image\\.version:\\s+(\\s|\"|')?(?<currentValue>.+?)(\\s|\"|'|$)",
+        "tags:\\s+-(\\s|\"|')+(?<currentValue>.+?)(\\s|\"|'|$)+"
+      ],
+      "depNameTemplate": "registry.access.redhat.com/ubi8",
+      "datasourceTemplate": "docker"
+    }
+  ]
+}

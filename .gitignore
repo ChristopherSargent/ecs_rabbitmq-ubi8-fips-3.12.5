@@ -1,0 +1,5 @@
+# ignore things
+deploy/rabbitmq-config/certs/
+deploy/rabbitmq-config/deprecated
+rabbitmq-dockerfiles/rabbitmq-base/depreacted
+rabbitmq-dockerfiles/rabbitmq-fips3.12.5/deprecated
