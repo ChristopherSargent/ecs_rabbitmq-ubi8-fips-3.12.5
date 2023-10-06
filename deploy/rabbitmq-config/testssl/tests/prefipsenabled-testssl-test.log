@@ -1,9 +1,9 @@
 ## Scan started as: "testssl.sh --log 10.200.135.10:15671"
 ## at ip-10-200-135-10:./bin/openssl.Linux.x86_64
-## version testssl: 3.2rc2 0b5539b from 2023-10-05
+## version testssl: 3.2rc2 73ca43f from 2023-10-06
 ## version openssl: "1.0.2-bad" from "Sep  1 14:03:44 2022")
 
-[7m Start 2023-10-06 13:31:28                -->> 10.200.135.10:15671 (10.200.135.10) <<--[m
+[7m Start 2023-10-06 15:29:46                -->> 10.200.135.10:15671 (10.200.135.10) <<--[m
 
  rDNS (10.200.135.10):   --
  Service detected:       HTTP
@@ -124,7 +124,7 @@ Hexcode  Cipher Suite Name (OpenSSL)       KeyExch.   Encryption  Bits     Ciphe
 [1m[4m Testing HTTP header response @ "/" [m
 
 [1m HTTP Status Code           [m  200 OK
-[1m HTTP clock skew              [m0 sec from localtime
+[1m HTTP clock skew              [m-1 sec from localtime
 [1m Strict Transport Security    [m[1;33mnot offered[m
 [1m Public Key Pinning           [m--
 [1m Server banner                [mCowboy
@@ -216,6 +216,6 @@ Hexcode  Cipher Suite Name (OpenSSL)       KeyExch.   Encryption  Bits     Ciphe
                               Grade capped to B. TLS 1.0 offered
                               Grade capped to A. HSTS is not offered
 
-[7m Done 2023-10-06 13:32:41 [  75s] -->> 10.200.135.10:15671 (10.200.135.10) <<--[m
+[7m Done 2023-10-06 15:31:00 [  76s] -->> 10.200.135.10:15671 (10.200.135.10) <<--[m
 
 

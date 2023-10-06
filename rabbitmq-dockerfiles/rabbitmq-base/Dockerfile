@@ -20,12 +20,12 @@ RUN dnf -y update && dnf -y install \
     socat \
     less 
 
-# Add OpenSSL 3.0.11
+# Add OpenSSL 3.0.8
 RUN yum install perl-core zlib-devel -y
 WORKDIR /usr/local/src
-RUN wget https://www.openssl.org/source/openssl-3.0.11.tar.gz
-RUN tar -zxf openssl-3.0.11.tar.gz
-WORKDIR /usr/local/src/openssl-3.0.11
+RUN wget https://www.openssl.org/source/openssl-3.0.8.tar.gz
+RUN tar -zxf openssl-3.0.8.tar.gz
+WORKDIR /usr/local/src/openssl-3.0.8
 RUN ./config enable-fips \
     --prefix="/opt/openssl" \
     --openssldir="/opt/openssl/etc/ssl" \
@@ -39,7 +39,7 @@ RUN make install
 RUN ldconfig -v
 RUN mv /bin/openssl /bin/openssl.bak
 RUN ln -s /opt/openssl/bin/openssl /usr/bin/
-ENV OPENSSL_PATH="/usr/local/src/openssl-3.0.11"
+ENV OPENSSL_PATH="/usr/local/src/openssl-3.0.8"
 ENV PATH=$OPENSSL_PATH:$PATH
 ENV OPENSSLDIR="/opt/openssl/etc/ssl"
 

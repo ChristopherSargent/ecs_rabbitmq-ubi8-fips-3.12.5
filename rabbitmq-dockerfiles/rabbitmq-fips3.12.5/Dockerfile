@@ -1,5 +1,5 @@
 # Image
-FROM rabbitmq-base:3.12.5.1
+FROM rabbitmq-base:3.12.5.2
 USER root
 
 # Rabbitmq Version
