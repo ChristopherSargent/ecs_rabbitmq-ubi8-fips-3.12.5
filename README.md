@@ -1,6 +1,6 @@
 
 ![alt text](ecs.logo.JPG)
-# Build base images needed to create the rabbitmq-fips:3.12.5 container image for rabbitmq 3.12.5 erlang 26.1 openssl 3.0.11
+# Build base images 
 This repository contains the necessary source code files to deploy the following container images. For additional details, please email at [c.sargent-ctr@ecstech.com](mailto:c.sargent-ctr@ecstech.com).
 
 # Images
