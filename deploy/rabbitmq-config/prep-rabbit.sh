@@ -1,5 +1,5 @@
 #!/bin/bash
-# Christopher Sargent updated 10012023
+# Christopher Sargent updated 10062023
 set -x #echo on
 
 # dos2unix files
@@ -40,5 +40,4 @@ docker exec -u:0 rabbitmq-fips3.12.5-6.0 openssl version
 sleep 5;
 
 # Enabled FIPS for Rabbit Erlang
-#docker exec -u:0 rabbitmq-fips3.12.5-6.0 rabbitmqctl eval 'crypto:enable_fips_mode(true).'
 docker exec -u:0 rabbitmq-fips3.12.5-6.0 rabbitmqctl eval 'crypto:info_fips().'

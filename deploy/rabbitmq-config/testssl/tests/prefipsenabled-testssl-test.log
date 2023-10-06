@@ -1,9 +1,9 @@
 ## Scan started as: "testssl.sh --log 10.200.135.10:15671"
 ## at ip-10-200-135-10:./bin/openssl.Linux.x86_64
-## version testssl: 3.2rc2 7a60251 from 2023-09-21
+## version testssl: 3.2rc2 0b5539b from 2023-10-05
 ## version openssl: "1.0.2-bad" from "Sep  1 14:03:44 2022")
 
-[7m Start 2023-10-05 19:16:32                -->> 10.200.135.10:15671 (10.200.135.10) <<--[m
+[7m Start 2023-10-06 13:31:28                -->> 10.200.135.10:15671 (10.200.135.10) <<--[m
 
  rDNS (10.200.135.10):   --
  Service detected:       HTTP
@@ -79,8 +79,8 @@ Hexcode  Cipher Suite Name (OpenSSL)       KeyExch.   Encryption  Bits     Ciphe
 [1m[4m Testing robust forward secrecy (FS)[m[4m -- omitting Null Authentication/Encryption, 3DES, RC4 [m
 
 [0;32m FS is offered (OK) [m          TLS_AES_256_GCM_SHA384 TLS_CHACHA20_POLY1305_SHA256 ECDHE-RSA-AES256-GCM-SHA384 ECDHE-RSA-AES256-SHA384 ECDHE-RSA-AES256-SHA DHE-RSA-AES256-GCM-SHA384 ECDHE-RSA-CHACHA20-POLY1305 DHE-RSA-CHACHA20-POLY1305
-                              DHE-RSA-AES256-SHA256 DHE-RSA-AES256-SHA TLS_AES_128_GCM_SHA256 TLS_AES_128_CCM_SHA256 TLS_AES_128_CCM_8_SHA256 ECDHE-RSA-AES128-GCM-SHA256 ECDHE-RSA-AES128-SHA256 ECDHE-RSA-AES128-SHA DHE-RSA-AES128-GCM-SHA256
-                              DHE-RSA-AES128-SHA256 DHE-RSA-AES128-SHA 
+                              DHE-RSA-AES256-SHA256 DHE-RSA-AES256-SHA TLS_AES_128_GCM_SHA256 TLS_AES_128_CCM_SHA256 TLS_AES_128_CCM_8_SHA256 ECDHE-RSA-AES128-GCM-SHA256 ECDHE-RSA-AES128-SHA256 ECDHE-RSA-AES128-SHA
+                              DHE-RSA-AES128-GCM-SHA256 DHE-RSA-AES128-SHA256 DHE-RSA-AES128-SHA 
 [1m Elliptic curves offered:     [m[0;32msect283k1[m [0;32msect283r1[m [0;32msect409k1[m [0;32msect409r1[m [0;32msect571k1[m [0;32msect571r1[m [0;32msecp256k1[m [0;32mprime256v1[m [0;32msecp384r1[m [0;32msecp521r1[m [0;32mbrainpoolP256r1[m [0;32mbrainpoolP384r1[m [0;32mbrainpoolP512r1[m [0;32mX25519[m [0;32mX448[m 
 [1m DH group offered:            [m[3mRFC3526/Oakley Group 14[m ([0;32m2048 bits[m)
 [1m TLS 1.2 sig_algs offered:    [mRSA-PSS-RSAE+SHA256 RSA-PSS-RSAE+SHA384 RSA-PSS-RSAE+SHA512 
@@ -107,7 +107,7 @@ Hexcode  Cipher Suite Name (OpenSSL)       KeyExch.   Encryption  Bits     Ciphe
 [1m Trust (hostname)             [m[0;31mcertificate does not match supplied URI[m
 [1m Chain of trust[m               [1;31mNOT ok[m (self signed CA in chain)
 [1m EV cert[m (experimental)       no 
-[1m Certificate Validity (UTC)   [m[0;33mexpires < 60 days (59)[m (2022-11-03 23:03 --> 2023-12-04 00:03)
+[1m Certificate Validity (UTC)   [m[0;33mexpires < 60 days (58)[m (2022-11-03 23:03 --> 2023-12-04 00:03)
 [1m ETS/"eTLS"[m, visibility info  not present
 [1m Certificate Revocation List  [mhttp://dashboard-ops-crl.s3.us-gov-west-1.amazonaws.com/crl/b193176c-8226-4a17-b817-bb1e45a7000b.crl
 [1m OCSP URI                     [m--
@@ -216,6 +216,6 @@ Hexcode  Cipher Suite Name (OpenSSL)       KeyExch.   Encryption  Bits     Ciphe
                               Grade capped to B. TLS 1.0 offered
                               Grade capped to A. HSTS is not offered
 
-[7m Done 2023-10-05 19:17:46 [  76s] -->> 10.200.135.10:15671 (10.200.135.10) <<--[m
+[7m Done 2023-10-06 13:32:41 [  75s] -->> 10.200.135.10:15671 (10.200.135.10) <<--[m
 
 

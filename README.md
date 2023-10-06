@@ -1,12 +1,12 @@
 
 ![alt text](ecs.logo.JPG)
-# Build base images
-This repository contains the necessary source code files to create the rabbitmq-fips:3.12.5 container image for rabbitmq 3.12.5 erlang 26.1 openssl 3.1.1. For additional details, please email at [c.sargent-ctr@ecstech.com](mailto:c.sargent-ctr@ecstech.com).
+# Build base images needed to create the rabbitmq-fips:3.12.5 container image for rabbitmq 3.12.5 erlang 26.1 openssl 3.0.11
+This repository contains the necessary source code files to deploy the following container images. For additional details, please email at [c.sargent-ctr@ecstech.com](mailto:c.sargent-ctr@ecstech.com).
 
 # Images
 1. ub8:1
-2. rabbitmq-base:3.12.5
-3. rabbitmq-fips:3.12.5
+2. rabbitmq-base:3.12.5.1
+3. rabbitmq-fips:3.12.5.1
 
 # Build ECS ub8:1 from [ironbank-repo](https://repo1.dso.mil/dsop/redhat/ubi/ubi8.git).
 * Note that I used the ironbank repo but added 2 scripts.
@@ -21,7 +21,7 @@ This repository contains the necessary source code files to create the rabbitmq-
 ```
 FIPS mode is enabled.
 ```
-# Build ECS rabbitmq-base:3.12.5
+# Build ECS rabbitmq-base:3.12.5.1
 1. ssh -i /root/ecs/alpha_key_pair.pem ec2-user@PG-TerraformPublicIP
 2. sudo -i
 3. cas
@@ -50,12 +50,12 @@ RUN dnf -y update && dnf -y install \
     socat \
     less
 
-# Add OpenSSL 3.1.1
+# Add OpenSSL 3.0.11
 RUN yum install perl-core zlib-devel -y
 WORKDIR /usr/local/src
-RUN wget https://www.openssl.org/source/openssl-3.1.1.tar.gz
-RUN tar -zxf openssl-3.1.1.tar.gz
-WORKDIR /usr/local/src/openssl-3.1.1
+RUN wget https://www.openssl.org/source/openssl-3.0.11.tar.gz
+RUN tar -zxf openssl-3.0.11.tar.gz
+WORKDIR /usr/local/src/openssl-3.0.11
 RUN ./config enable-fips \
     --prefix="/opt/openssl" \
     --openssldir="/opt/openssl/etc/ssl" \
@@ -69,7 +69,7 @@ RUN make install
 RUN ldconfig -v
 RUN mv /bin/openssl /bin/openssl.bak
 RUN ln -s /opt/openssl/bin/openssl /usr/bin/
-ENV OPENSSL_PATH="/usr/local/src/openssl-3.1.1"
+ENV OPENSSL_PATH="/usr/local/src/openssl-3.0.11"
 ENV PATH=$OPENSSL_PATH:$PATH
 ENV OPENSSLDIR="/opt/openssl/etc/ssl"
 
@@ -103,7 +103,6 @@ ENV ERLANG_INSTALL_PATH_PREFIX=/"opt/erlang"
 ENV OPENSSL_INSTALL_PATH_PREFIX="/opt/openssl"
 ENV PATH $ERLANG_INSTALL_PATH_PREFIX/bin:$PATH
 
-
 # Download and install RabbitMQ 3.12.5
 WORKDIR /
 RUN wget https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.12.5/rabbitmq-server-3.12.5-1.el8.noarch.rpm
@@ -118,21 +117,20 @@ EXPOSE 5672 15672
 # Set the default command to run when the container starts
 CMD ["rabbitmq-server"]
 ```
-10. docker build -t rabbitmq-base:3.12.5 -f Dockerfile .
-
-11. docker run -it rabbitmq-base:3.12.5 /bin/bash
+10. docker build -t rabbitmq-base:3.12.5.1 -f Dockerfile .
+11. docker run -it rabbitmq-base:3.12.5.1 /bin/bash
 12. fips-mode-setup --check
 ```
 FIPS mode is enabled.
 ```
-# Build ECS rabbitmq-fips:3.12.5
+# Build ECS rabbitmq-fips:3.12.5.1
 1. ssh -i /root/ecs/alpha_key_pair.pem ec2-user@PG-TerraformPublicIP
 2. sudo -i
 3. cd /home/christopher.sargent/rabbitmq3.12.5-ubi8-fips/rabbitmq-dockerfiles/rabbitmq-fips3.12.5
 4. vim Dockerfile
 ```
 # Image 
-FROM rabbitmq-base:3.12.5
+FROM rabbitmq-base:3.12.5.1
 USER root
 
 # Rabbitmq Version
@@ -207,24 +205,20 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 
 CMD ["rabbitmq-server"]
 ```
-5. DOCKER_BUILDKIT=1 docker build -t rabbitmq-fips:3.12.5 -f Dockerfile .
-6. docker run -it -u:0 rabbitmq-fips:3.12.5 /bin/bash
-7. ll /plugins/ | wc -l # Note this now matches 036436800059.dkr.ecr.us-gov-west-1.amazonaws.com/rabbitmq-fips:latest
-```
-75
-```
-8. rabbitmqadmin --version
+5. DOCKER_BUILDKIT=1 docker build -t rabbitmq-fips:3.12.5.1 -f Dockerfile .
+6. docker run -it -u:0 rabbitmq-fips:3.12.5.1 /bin/bash
+7. rabbitmqadmin --version
 ```
 rabbitmqadmin 3.12.5
 ```
-9. erl -eval '{ok, Version} = file:read_file(filename:join([code:root_dir(), "releases", erlang:system_info(otp_release), "OTP_VERSION"])), io:fwrite(Version), halt().' -noshell
+8. erl -eval '{ok, Version} = file:read_file(filename:join([code:root_dir(), "releases", erlang:system_info(otp_release), "OTP_VERSION"])), io:fwrite(Version), halt().' -noshell
 ```
 26.1
 ```
-10. openssl version -a
+9. openssl version -a
 ```
-OpenSSL 3.1.1 30 May 2023 (Library: OpenSSL 3.1.1 30 May 2023)
-built on: Thu Oct  5 18:02:49 2023 UTC
+OpenSSL 3.0.11 19 Sep 2023 (Library: OpenSSL 3.0.11 19 Sep 2023)
+built on: Fri Oct  6 12:53:22 2023 UTC
 platform: linux-x86_64
 options:  bn(64,64)
 compiler: gcc -fPIC -pthread -m64 -Wa,--noexecstack -Wall -O3 -DOPENSSL_USE_NODELETE -DL_ENDIAN -DOPENSSL_PIC -DOPENSSL_BUILDING_OPENSSL -DNDEBUG
@@ -234,24 +228,24 @@ MODULESDIR: "/opt/openssl/lib/ossl-modules"
 Seeding source: os-specific
 CPUINFO: OPENSSL_ia32cap=0xfffa3203578bffff:0x7a9
 ```
-11. fips-mode-setup --check
+10. fips-mode-setup --check
 ```
 FIPS mode is enabled.
 ```
-# Test Deploy 3.12.5.26.1.3.1.1 via rabbitmq-fips:3.12.5 image and test FIPS
+# Test Deploy 3.12.5.26.1.3.0.11 via rabbitmq-fips:3.12.5.1 image and test FIPS
 1. ssh -i /root/ecs/alpha_key_pair.pem ec2-user@PG-TerraformPublicIP
 2. sudo -i
 3. /home/christopher.sargent/rabbitmq3.12.5-ubi8-fips/deploy/rabbitmq-config
-4. docker run --name rabbitmq-fips3.12.5-6.0 -d -p 15671:15671 -p 5671:5671 --network rabbitmq_go_net --restart always rabbitmq-fips:3.12.5
+4. docker run --name rabbitmq-fips3.12.5-6.0 -d -p 15671:15671 -p 5671:5671 --network rabbitmq_go_net --restart always rabbitmq-fips:3.12.5.1
 5. ./prep-rabbit.sh 
 6. docker exec -u:0 rabbitmq-fips3.12.5-6.0 rabbitmqctl eval 'crypto:info_fips().'
 ```
 not_enabled
 ```
-7. git clone --depth 1 https://github.com/drwetter/testssl.sh.git && cd testssl.sh
+7. git clone --depth 1 https://github.com/drwetter/testssl.sh.git && mv testssl.sh testssl && cd testssl
 8. mkdir tests
 9. ./testssl.sh --log 10.200.135.10:15671 
-10. mv 10.200.135.10_p15671-20231005-1916.log tests/prefipsenabled-testssl-test.log
+10. mv 10.200.135.10_p15671-20231006-1331.log tests/prefipsenabled-testssl-test.log
 11. https://PG-TerraformPublicIP:15671 
 * Verify site is up
 
@@ -271,12 +265,12 @@ true
 enabled
 ```
 3. ./testssl.sh --log 10.200.135.10:15671
-4. mv 10.200.135.10_p15671-20231005-1913.log tests/postfipsenabled-testssl-test.log
+4. mv 10.200.135.10_p15671-20231006-1334.log tests/postfipsenabled-testssl-test.log
 5. docker exec -it -u:0 rabbitmq-fips3.12.5-6.0 /bin/bash
 5. openssl version -a
 ```
-OpenSSL 3.1.1 30 May 2023 (Library: OpenSSL 3.1.1 30 May 2023)
-built on: Sun Sep 24 17:57:47 2023 UTC
+OpenSSL 3.0.11 19 Sep 2023 (Library: OpenSSL 3.0.11 19 Sep 2023)
+built on: Fri Oct  6 12:53:22 2023 UTC
 platform: linux-x86_64
 options:  bn(64,64)
 compiler: gcc -fPIC -pthread -m64 -Wa,--noexecstack -Wall -O3 -DOPENSSL_USE_NODELETE -DL_ENDIAN -DOPENSSL_PIC -DOPENSSL_BUILDING_OPENSSL -DNDEBUG
@@ -304,7 +298,7 @@ enabled
 ```
 10. rabbitmqctl eval 'crypto:info_lib().'
 ```
-[{<<"OpenSSL">>,806354960,<<"OpenSSL 3.1.1 30 May 2023">>}]
+[{<<"OpenSSL">>,805306544,<<"OpenSSL 3.0.11 19 Sep 2023">>}]
 ```
 12. https://PG-TerraformPublicIP:15671 
 * Verify site is up
@@ -320,8 +314,8 @@ enabled
 2. sudo -i
 3. su - jdonaldson
 4. aws ecr get-login-password --region us-gov-west-1 | docker login --username AWS --password-stdin 036436800059.dkr.ecr.us-gov-west-1.amazonaws.com
-5. docker tag rabbitmq-fips:3.12.5 036436800059.dkr.ecr.us-gov-west-1.amazonaws.com/rabbitmq-fips:3.12.5.26.1.3.1.1
-6. docker push 036436800059.dkr.ecr.us-gov-west-1.amazonaws.com/rabbitmq-fips:3.12.5.26.1.3.1.1
+5. docker tag rabbitmq-fips:3.12.5.1 036436800059.dkr.ecr.us-gov-west-1.amazonaws.com/rabbitmq-fips:3.12.5.26.1.3.0.11
+6. docker push 036436800059.dkr.ecr.us-gov-west-1.amazonaws.com/rabbitmq-fips:3.12.5.26.1.3.0.11
 7. https://us-gov-west-1.console.amazonaws-us-gov.com/ecr/repositories/rabbitmq-fips?region=us-gov-west-1
 * Verify
 
@@ -367,18 +361,19 @@ total 2577816
 total 2577816
 -rw-------. 1 root root 2639683072 Jul 10 15:59 rabbitmq-fips:3.11.6.25.2.3.0.9.tar
 ```
-# Docker save rabbitmq-fips:3.12.5.26.1.3.1.1
+# Docker save rabbitmq-fips:3.12.5.26.1.3.0.11
 1. ssh -i /root/ecs/alpha_key_pair.pem ec2-user@PG-TerraformPublicIP
 2. sudo -i
-3. docker save -o /mnt/s3/images/rabbitmq-fips:3.12.5.26.1.3.1.1.tar 036436800059.dkr.ecr.us-gov-west-1.amazonaws.com/rabbitmq-fips:3.12.5.26.1.3.1.1
+3. docker save -o /mnt/s3/images/rabbitmq-fips:3.12.5.26.1.3.0.11.tar 036436800059.dkr.ecr.us-gov-west-1.amazonaws.com/rabbitmq-fips:3.12.5.26.1.3.0.11
 4. ll /mnt/s3/images
 ```
-total 16349092
+total 18287318
 -rw-------. 1 root root 2908504064 Jul 11 14:34 rabbitmq-fips3.11.6-6.0_agency07102023.tar
 -rw-------. 1 root root 2908488192 Jul 11 13:51 rabbitmq-fips3.11.6-6.0_central07102023.tar
 -rw-------. 1 root root 2908503552 Jul 11 14:53 rabbitmq-fips3.11.6-6.0_federal07102023.tar
 -rw-------. 1 root root 2656096256 Sep 13 17:41 rabbitmq-fips:3.11.6.25.2.2.3.0.9.tar
 -rw-------. 1 root root 2639683072 Jul 10 15:59 rabbitmq-fips:3.11.6.25.2.3.0.9.tar
+-rw-------. 1 root root 1984743936 Oct  6 13:48 rabbitmq-fips:3.12.5.26.1.3.0.11.tar
 -rw-------. 1 root root 2062849536 Oct  5 21:50 rabbitmq-fips:3.12.5.26.1.3.1.1.tar
 -rw-------. 1 root root  657345024 Sep 20 19:19 rabbitmq-fips:3.9.10.23.2.1.1.0.2.tar
 ```
